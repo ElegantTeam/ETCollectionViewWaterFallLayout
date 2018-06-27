@@ -14,9 +14,6 @@ public enum ETCollectionViewWaterfallLayoutItemRenderDirection {
     case rightToLeft
 }
 
-public let ETCollectionElementKindSectionHeader = "ETCollectionElementKindSectionHeader"
-public let ETCollectionElementKindSectionFooter = "ETCollectionElementKindSectionFooter"
-
 @objc protocol ETCollectionViewDelegateWaterfallLayout: class, UICollectionViewDelegate {
     
     @objc func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
@@ -39,7 +36,7 @@ public let ETCollectionElementKindSectionFooter = "ETCollectionElementKindSectio
 }
 
 class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
-
+    
     open var columnCount: Int = 2 {
         didSet {
             if columnCount != oldValue {
@@ -236,13 +233,13 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
             top += headerInset.top
             
             if headerHeight > 0 {
-                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: ETCollectionElementKindSectionHeader, with: IndexPath(item: 0, section: section))
+                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, with: IndexPath(item: 0, section: section))
                 attributes.frame = CGRect(x: headerInset.left,
                                           y: top,
                                           width: (self.collectionView?.bounds.size.width)!,
                                           height: headerHeight)
                 self.headersAttributes[section] = attributes
-                self.allItemAttributes[section] = attributes
+                self.allItemAttributes.append(attributes)
                 
                 top = attributes.frame.maxY + headerInset.bottom
             }
@@ -299,7 +296,7 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
             top += footerInset.top
             
             if footerHeight > 0 {
-                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: ETCollectionElementKindSectionFooter, with: IndexPath(item: 0, section: section))
+                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, with: IndexPath(item: 0, section: section))
                 attributes.frame = CGRect(x: footerInset.left,
                                           y: top,
                                           width: (self.collectionView?.bounds.size.width)! - (footerInset.left + footerInset.right),
@@ -359,12 +356,13 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
     }
     
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-    
-        if elementKind == ETCollectionElementKindSectionHeader {
+        
+        if elementKind == UICollectionElementKindSectionHeader {
+            print(self.headersAttributes[indexPath.section]?.frame.height)
             return self.headersAttributes[indexPath.section]
         }
         
-        if elementKind == ETCollectionElementKindSectionFooter {
+        if elementKind == UICollectionElementKindSectionFooter {
             return self.footersAttributes[indexPath.section]
         }
         
@@ -458,14 +456,14 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
         let columnCount = self.columnCount(forSection: section)
         
         switch itemRenderDirection {
-            case .shortestFirst:
-                index = shortestColumnIndexIn(section: section)
-        
-            case .leftToRight:
-                index = item % columnCount
+        case .shortestFirst:
+            index = shortestColumnIndexIn(section: section)
             
-            case .rightToLeft:
-                index = (columnCount - 1) - (item % columnCount)
+        case .leftToRight:
+            index = item % columnCount
+            
+        case .rightToLeft:
+            index = (columnCount - 1) - (item % columnCount)
         }
         
         return index
