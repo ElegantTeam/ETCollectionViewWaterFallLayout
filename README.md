@@ -44,11 +44,11 @@ Your collection view's delegate must conforms to `ETCollectionViewDelegateWaterf
 func collectionView(_ collectionView: UICollectionView, layout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
 ```
 
-## Requirements
+## Support
 
-- iOS 8.0+ 
+- iOS 9.0+ 
 - Xcode 8.0+
-- Swift 3.0+
+- Swift 5.0
 
 ## Objective-C Version
 * chiahsien: [CHTCollectionViewWaterfallLayout](https://github.com/chiahsien/CHTCollectionViewWaterfallLayout)  
