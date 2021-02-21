@@ -113,7 +113,7 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
     
     fileprivate weak var delegate: ETCollectionViewDelegateWaterfallLayout! {
         
-        return self.collectionView?.delegate as! ETCollectionViewDelegateWaterfallLayout
+        return (self.collectionView?.delegate as! ETCollectionViewDelegateWaterfallLayout)
     }
     
     fileprivate var columnHeights: [[CGFloat]] = []
@@ -233,7 +233,7 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
             top += headerInset.top
             
             if headerHeight > 0 {
-                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, with: IndexPath(item: 0, section: section))
+                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: IndexPath(item: 0, section: section))
                 attributes.frame = CGRect(x: headerInset.left,
                                           y: top,
                                           width: (self.collectionView?.bounds.size.width)!,
@@ -296,7 +296,7 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
             top += footerInset.top
             
             if footerHeight > 0 {
-                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, with: IndexPath(item: 0, section: section))
+                let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: IndexPath(item: 0, section: section))
                 attributes.frame = CGRect(x: footerInset.left,
                                           y: top,
                                           width: (self.collectionView?.bounds.size.width)! - (footerInset.left + footerInset.right),
@@ -357,12 +357,11 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
     
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         
-        if elementKind == UICollectionElementKindSectionHeader {
-            print(self.headersAttributes[indexPath.section]?.frame.height)
+        if elementKind == UICollectionView.elementKindSectionHeader {
             return self.headersAttributes[indexPath.section]
         }
         
-        if elementKind == UICollectionElementKindSectionFooter {
+        if elementKind == UICollectionView.elementKindSectionFooter {
             return self.footersAttributes[indexPath.section]
         }
         
@@ -413,7 +412,7 @@ class ETCollectionViewWaterfallLayout: UICollectionViewLayout {
     fileprivate func shortestColumnIndexIn(section: Int) -> Int {
         
         var index = 0
-        var shortestHeight = CGFloat(FLT_MAX)
+        var shortestHeight = CGFloat(Float.greatestFiniteMagnitude)
         
         for (idx, height) in self.columnHeights[section].enumerated() {
             if height < shortestHeight {
